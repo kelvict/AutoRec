@@ -52,7 +52,7 @@ mae  = tf.reduce_mean(tf.abs(r - y))
 # loss function
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
+sess = tf.InteractiveSession(config=config)
 sess.run(tf.global_variables_initializer())
 
 uFactorRegular = tf.reduce_sum(tf.square(uFactor), 1, keep_dims=True)
