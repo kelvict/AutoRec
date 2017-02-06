@@ -85,7 +85,7 @@ rmse = tf.sqrt(tf.reduce_sum(tf.square((y - preData)*preMask)) / tf.reduce_sum(p
 # training
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
+sess = tf.InteractiveSession(config=config)
 sess.run(tf.global_variables_initializer())
 
 loss = tf.reduce_mean(tf.reduce_sum(tf.square((y - data)*mask), 1, keep_dims=True))
