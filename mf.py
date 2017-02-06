@@ -50,8 +50,10 @@ rmse = tf.sqrt(tf.reduce_mean(tf.square(r - y)))
 mae  = tf.reduce_mean(tf.abs(r - y))
 
 # loss function
-sess = tf.InteractiveSession()
-sess.run(tf.initialize_all_variables())
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.Session(config=config)
+sess.run(tf.global_variables_initializer())
 
 uFactorRegular = tf.reduce_sum(tf.square(uFactor), 1, keep_dims=True)
 vFactorRegular = tf.reduce_sum(tf.square(vFactor), 1, keep_dims=True)

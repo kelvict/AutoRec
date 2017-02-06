@@ -91,8 +91,10 @@ rmse = tf.sqrt(tf.reduce_mean(tf.square(r - y)))
 mae  = tf.reduce_mean(tf.abs(r - y))
 
 # loss function
-sess = tf.InteractiveSession()
-sess.run(tf.initialize_all_variables())
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.Session(config=config)
+sess.run(tf.global_variables_initializer())
 
 loss = tf.reduce_mean(tf.square(r - y))
 trainStep = tf.train.GradientDescentOptimizer(learnRate).minimize(loss)
