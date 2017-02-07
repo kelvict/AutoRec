@@ -98,7 +98,7 @@ for epoch in range(epochCount):
 
     rmse_score = rmse.eval(feed_dict={u:test_u, v:test_v, r:test_r})
     mae_score = mae.eval(feed_dict={u:test_u, v:test_v, r:test_r})
-    print("%d/%d\t%.4f\t%.4f"%(epoch+1, epochCount, rmse_score, mae_score))
+    print("%d/%d\tRMSE: %.4f\tMAE: %.4f"%(epoch+1, epochCount, rmse_score, mae_score))
 
 
 
