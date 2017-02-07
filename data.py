@@ -10,7 +10,7 @@ def ml_1m():
     
     # load data
     data = []
-    for line in open("ml-1m/ratings.dat"):
+    for line in open("../../dataset/recommend/ml-1m/ratings.dat"):
         userId, itemId, rating, timestamp = line.strip().split("::")
         data.append([userId, itemId, rating])
     

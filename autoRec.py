@@ -13,15 +13,16 @@ try:
     batchSize = int(sys.argv[1])
     learnRate = float(sys.argv[2])
 except:
-    print("batchSize learnRate")
-    exit()
+    print("default batchSize learnRate")
+    batchSize = 32
+    learnRate = 0.1
 
 #batchSize = 32
 #learnRate = 0.1
 
 # hyper parameter
 k = 500
-epochCount = 100
+epochCount = 300
 
 # load data
 import data
