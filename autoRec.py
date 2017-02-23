@@ -26,7 +26,7 @@ epochCount = 300
 
 # load data
 import data
-userCount, itemCount, trainSet, testSet = data.ml_1m()
+userCount, itemCount, trainSet, testSet = data.ml_1m(should_shuffle=False)
 
 # train data
 trainData = defaultdict(lambda:[0]*userCount)

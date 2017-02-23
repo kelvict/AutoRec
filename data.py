@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-def ml_1m():
+def ml_1m(should_shuffle=True):
     # id to index
     userIdToUserIndex = {}
     basicUserIndex = 0
@@ -13,10 +13,12 @@ def ml_1m():
     for line in open("ml-1m/ratings.dat"):
         userId, itemId, rating, timestamp = line.strip().split("::")
         data.append([userId, itemId, rating])
-    
+
+    #TODO if not use shuffle autorec maybe better
     # shuffle data
-    random.seed(123456789)
-    random.shuffle(data)
+    if should_shuffle:
+        random.seed(123456789)
+        random.shuffle(data)
 
     # split data
     ratingCount = len(data)
