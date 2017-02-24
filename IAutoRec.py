@@ -59,6 +59,7 @@ for t in testSet:
 allData     = []
 allTestData = []
 allTestMask = []
+
 for userId in testData:
     allData.append(trainData[userId])
     allTestData.append(testData[userId])
@@ -116,5 +117,5 @@ for epoch in range(epochCount):
         trainStep.run(feed_dict={data:batchData, mask:batchMask})
 
     # predict
-    result = rmse.eval(feed_dict={data:allData, preData:allTestData, preMask:allTestMask})
-    print("epoch %d/%d\trmse: %.4f"%(epoch+1, epochCount, result))
+    eval_rmse = rmse.eval(feed_dict={data:allData, preData:allTestData, preMask:allTestMask})
+    print("epoch %d/%d\trmse: %.4f"%(epoch+1, epochCount, eval_rmse))
