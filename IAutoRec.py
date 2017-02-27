@@ -17,16 +17,17 @@ try:
     os.environ["CUDA_VISIBLE_DEVICES"] = gpu
 except:
     print("default batchSize learnRate")
-    batchSize = 32
-    learnRate = 0.1
+    batchSize = 512
+    learnRate = 0.05
 
 #batchSize = 32
 #learnRate = 0.1
 
 # hyper parameter
-k = 500
+k = 250
+n_layer = [500, 250, 500]
 epochCount = 300
-
+dropout_rate = [0.8, 0.8, 1]
 # load data
 import data
 userCount, itemCount, trainSet, testSet = data.ml_1m(should_shuffle=False)
@@ -74,15 +75,30 @@ mask = tf.placeholder(tf.float32, [None, itemCount])
 
 import math
 scale = math.sqrt(6.0 / (userCount + k))
+n_layer = [itemCount] + n_layer + [itemCount]
+Ws = []
+bs = []
+layers = []
+y = data
+print y
+W0 = tf.Variable(tf.random_uniform([itemCount, k], -scale, scale))
+b0 = tf.Variable(tf.random_uniform([k], -scale, scale))
+W1 = tf.Variable(tf.random_uniform([k, itemCount], -scale, scale))
+b1 = tf.Variable(tf.random_uniform([itemCount], -scale, scale))
 
-W1 = tf.Variable(tf.random_uniform([itemCount, k], -scale, scale))
-b1 = tf.Variable(tf.random_uniform([k], -scale, scale))
-mid = tf.nn.softmax(tf.matmul(data, W1) + b1)
-
-W2 = tf.Variable(tf.random_uniform([k, itemCount], -scale, scale))
-b2 = tf.Variable(tf.random_uniform([itemCount], -scale, scale))
-y = tf.matmul(mid, W2) + b2
-
+mid_layer = tf.nn.dropout(tf.nn.softmax(tf.matmul(tf.nn.dropout(data, dropout_rate[0]), W0) + b0), dropout_rate[1])
+y = tf.matmul(mid_layer, W1) + b1
+y = tf.nn.dropout(y, dropout_rate[2])
+"""
+for i in xrange(len(n_layer)-1):
+    W = tf.Variable(tf.random_uniform([n_layer[i], n_layer[i+1]], -scale, scale))
+    b = tf.Variable(tf.random_uniform([n_layer[i+1]], -scale, scale))
+    y = tf.nn.dropout(tf.nn.softmax(tf.matmul(y, W) + b), dropout_rate)
+    print y
+    Ws.append(W)
+    bs.append(b)
+    layers.append(y)
+"""
 preData = tf.placeholder(tf.float32, [None, itemCount])
 preMask = tf.placeholder(tf.float32, [None, itemCount])
 rmse = tf.sqrt(tf.reduce_sum(tf.square((y - preData)*preMask)) / tf.reduce_sum(preMask))
@@ -118,4 +134,5 @@ for epoch in range(epochCount):
 
     # predict
     eval_rmse = rmse.eval(feed_dict={data:allData, preData:allTestData, preMask:allTestMask})
-    print("epoch %d/%d\trmse: %.4f"%(epoch+1, epochCount, eval_rmse))
+    loss = 0#loss.eval(feed_dict={data:allData, preData:allTestData, preMask:allTestMask})
+    print("epoch %d/%d\tloss: %.4f\trmse: %.4f"%(epoch+1, epochCount, loss, eval_rmse))
