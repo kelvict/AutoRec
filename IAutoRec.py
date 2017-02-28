@@ -74,7 +74,7 @@ data = tf.placeholder(tf.float32, [None, itemCount])
 mask = tf.placeholder(tf.float32, [None, itemCount])
 
 import math
-scale = math.sqrt(6.0 / (userCount + k))
+scale = math.sqrt(6.0 / (itemCount + k))
 n_layer = [itemCount] + n_layer + [itemCount]
 Ws = []
 bs = []
