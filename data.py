@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-def ml_1m(should_shuffle=True):
+def ml_1m(should_shuffle=True, seed=123456789):
     # id to index
     userIdToUserIndex = {}
     basicUserIndex = 0
@@ -17,7 +17,7 @@ def ml_1m(should_shuffle=True):
     #TODO if not use shuffle autorec maybe better
     # shuffle data
     if should_shuffle:
-        random.seed(123456789)
+        random.seed(seed)
         random.shuffle(data)
 
     # split data

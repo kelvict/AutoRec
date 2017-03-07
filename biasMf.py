@@ -1,14 +1,15 @@
 import tensorflow as tf
 import numpy as np
 
-tf.set_random_seed(123456789)
-np.random.seed(123456789)
+#tf.set_random_seed(123456789)
+#np.random.seed(123456789)
 
 import sys
 try:
     batchSize = int(sys.argv[1])
     learnRate = float(sys.argv[2])
     reLambda  = float(sys.argv[3])
+    seed = int(sys.argv[4])
 except:
     print("batchSize learnRate reLambda")
     batchSize = 128
@@ -23,11 +24,11 @@ print("="*20)
 
 # hyper parameter
 k = 10
-epochCount = 400
+epochCount = 200
 
 # load data
 import data
-userCount, itemCount, trainSet, testSet = data.ml_1m()
+userCount, itemCount, trainSet, testSet = data.ml_1m(seed=seed)
 globalMean = trainSet[:,2:3].mean()
 
 print("dataset info:")
@@ -72,6 +73,7 @@ loss = tf.reduce_mean(tf.square(r - y) + reLambda * (uFactorRegular + vFactorReg
 trainStep = tf.train.GradientDescentOptimizer(learnRate).minimize(loss)
 
 # iterator
+min_rmse_score = 9999
 for epoch in range(epochCount):
     np.random.shuffle(trainSet)
  
@@ -92,8 +94,9 @@ for epoch in range(epochCount):
     test_r = testSet[:, 2:3]
 
     rmse_score = rmse.eval(feed_dict={u:test_u, v:test_v, r:test_r})
+    min_rmse_score = min(rmse_score, min_rmse_score)
     mae_score = mae.eval(feed_dict={u:test_u, v:test_v, r:test_r})
-    print("%d/%d\tRMSE: %.4f\tMAE: %.4f"%(epoch+1, epochCount, rmse_score, mae_score))
+    print("%d/%d\tRMSE: %.4f\tMAE: %.4f\tMIN_RMSE: %.4f"%(epoch+1, epochCount, rmse_score, mae_score, min_rmse_score))
 
 
 
